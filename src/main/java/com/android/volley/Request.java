@@ -133,7 +133,8 @@ public class Request<T> implements Comparable<Request<T>> {
      * listener is not provided here as delivery of responses is provided by subclasses, who have a
      * better idea of how to deliver an already-parsed response.
      *
-     * @deprecated Use {@link #Request(int, String, com.android.volley.toolbox.ResponseHandler)}.
+     * @deprecated Use {@link #Request(int, String, com.android.volley.Response.ErrorListener,
+     * com.android.volley.toolbox.ResponseHandler)}.
      */
     @Deprecated
     public Request(String url, Response.ErrorListener listener) {
