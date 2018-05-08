@@ -24,7 +24,6 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.GuardedBy;
 import android.text.TextUtils;
 import com.android.volley.VolleyLog.MarkerLog;
-import com.android.volley.toolbox.ResponseHandler;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -134,7 +133,7 @@ public class Request<T> implements Comparable<Request<T>> {
      * better idea of how to deliver an already-parsed response.
      *
      * @deprecated Use {@link #Request(int, String, com.android.volley.Response.ErrorListener,
-     * com.android.volley.toolbox.ResponseHandler)}.
+     * ResponseHandler)}.
      */
     @Deprecated
     public Request(String url, Response.ErrorListener listener) {
