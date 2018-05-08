@@ -14,5 +14,5 @@ public class ClearCacheResponseHandler extends ResponseHandler<Object> {
     }
 
     @Override
-    protected void deliverResponse(Object response) {}
+    public void deliverResponse(Object response) {}
 }
