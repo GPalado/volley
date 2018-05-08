@@ -1,9 +1,6 @@
-package com.android.volley.toolbox;
+package com.android.volley;
 
 import android.support.annotation.GuardedBy;
-
-import com.android.volley.NetworkResponse;
-import com.android.volley.Response;
 
 /**
  * Base class for handling response parsing and delivery.
@@ -26,9 +23,9 @@ public abstract class ResponseHandler<T> {
         mListener = listener;
     }
 
-    public abstract Response<T> parseNetworkResponse(NetworkResponse response);
+    protected abstract Response<T> parseNetworkResponse(NetworkResponse response);
 
-    public void deliverResponse(T response) {
+    protected void deliverResponse(T response) {
         Response.Listener<T> listener;
         synchronized (mLock){
             listener = mListener;
