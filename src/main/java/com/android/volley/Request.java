@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Base class for all network requests.
+ * Class for network requests.
  *
  * @param <T> The type of parsed response this request expects.
  */
