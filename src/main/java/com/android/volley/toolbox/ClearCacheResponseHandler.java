@@ -2,6 +2,7 @@ package com.android.volley.toolbox;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
+import com.android.volley.ResponseHandler;
 
 public class ClearCacheResponseHandler extends ResponseHandler<Object> {
     public ClearCacheResponseHandler(Response.Listener<Object> listener) {

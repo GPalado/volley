@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
+import com.android.volley.ResponseHandler;
 import com.android.volley.VolleyLog;
 
 public class ImageResponseHandler extends ResponseHandler<Bitmap> {

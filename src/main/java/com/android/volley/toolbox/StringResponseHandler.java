@@ -2,6 +2,7 @@ package com.android.volley.toolbox;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
+import com.android.volley.ResponseHandler;
 
 import java.io.UnsupportedEncodingException;
 
@@ -12,6 +13,7 @@ public class StringResponseHandler extends ResponseHandler<String> {
     }
 
     @Override
+    @SuppressWarnings("DefaultCharset")
     public Response<String> parseNetworkResponse(NetworkResponse response) {
         String parsed;
         try {
