@@ -324,7 +324,7 @@ public class BasicNetworkTest {
     }
 
     private static Request<String> buildRequest() {
-        return new Request<String>(Request.Method.GET, "http://foo", null) {
+        return new Request<String>(Request.Method.GET, "http://foo", null, null) {
 
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {

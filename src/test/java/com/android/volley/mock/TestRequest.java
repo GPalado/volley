@@ -33,7 +33,7 @@ public class TestRequest {
         }
 
         public Base(int method, String url, Response.ErrorListener listener) {
-            super(method, url, listener);
+            super(method, url, listener, null);
         }
 
         @Override
