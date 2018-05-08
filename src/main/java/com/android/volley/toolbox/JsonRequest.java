@@ -17,9 +17,7 @@
 package com.android.volley.toolbox;
 
 import android.support.annotation.GuardedBy;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyLog;
@@ -51,12 +49,18 @@ public abstract class JsonRequest<T> extends Request<T> {
      * Deprecated constructor for a JsonRequest which defaults to GET unless {@link #getPostBody()}
      * or {@link #getPostParams()} is overridden (which defaults to POST).
      *
-     * @deprecated Use {@link #JsonRequest(int, String, String, Listener, ErrorListener)}.
+     * @deprecated Use {@link #JsonRequest(int, String, String, Listener, ErrorListener,
+     * ResponseHandler)}.
      */
     @Deprecated
     public JsonRequest(
-            String url, String requestBody, Listener<T> listener, ErrorListener errorListener) {
-        this(Method.DEPRECATED_GET_OR_POST, url, requestBody, listener, errorListener);
+            String url,
+            String requestBody,
+            Listener<T> listener,
+            ErrorListener errorListener,
+            ResponseHandler<T> responseHandler) {
+        this(Method.DEPRECATED_GET_OR_POST, url, requestBody, listener, errorListener,
+                responseHandler);
     }
 
     public JsonRequest(
@@ -64,8 +68,9 @@ public abstract class JsonRequest<T> extends Request<T> {
             String url,
             String requestBody,
             Listener<T> listener,
-            ErrorListener errorListener) {
-        super(method, url, errorListener);
+            ErrorListener errorListener,
+            ResponseHandler<T> responseHandler) {
+        super(method, url, errorListener, responseHandler);
         mListener = listener;
         mRequestBody = requestBody;
     }
@@ -77,20 +82,6 @@ public abstract class JsonRequest<T> extends Request<T> {
             mListener = null;
         }
     }
-
-    @Override
-    protected void deliverResponse(T response) {
-        Response.Listener<T> listener;
-        synchronized (mLock) {
-            listener = mListener;
-        }
-        if (listener != null) {
-            listener.onResponse(response);
-        }
-    }
-
-    @Override
-    protected abstract Response<T> parseNetworkResponse(NetworkResponse response);
 
     /** @deprecated Use {@link #getBodyContentType()}. */
     @Deprecated

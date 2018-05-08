@@ -19,9 +19,7 @@ package com.android.volley.toolbox;
 import android.os.Handler;
 import android.os.Looper;
 import com.android.volley.Cache;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.Response;
 
 /** A synthetic request used for clearing the cache. */
 public class ClearCacheRequest extends Request<Object> {
@@ -35,7 +33,7 @@ public class ClearCacheRequest extends Request<Object> {
      * @param callback Callback to make on the main thread once the cache is clear, or null for none
      */
     public ClearCacheRequest(Cache cache, Runnable callback) {
-        super(Method.GET, null, null);
+        super(Method.GET, null, null, new ClearCacheResponseHandler(null));
         mCache = cache;
         mCallback = callback;
     }
@@ -55,12 +53,4 @@ public class ClearCacheRequest extends Request<Object> {
     public Priority getPriority() {
         return Priority.IMMEDIATE;
     }
-
-    @Override
-    protected Response<Object> parseNetworkResponse(NetworkResponse response) {
-        return null;
-    }
-
-    @Override
-    protected void deliverResponse(Object response) {}
 }
