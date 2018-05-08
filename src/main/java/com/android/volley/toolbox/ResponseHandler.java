@@ -18,7 +18,7 @@ public abstract class ResponseHandler<T> {
 
     public abstract Response<T> parseNetworkResponse(NetworkResponse response);
 
-    protected void deliverResponse(T response) {
+    public void deliverResponse(T response) {
         Response.Listener<T> listener;
         synchronized (mLock){
             listener = mListener;
