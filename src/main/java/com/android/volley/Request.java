@@ -24,6 +24,8 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.GuardedBy;
 import android.text.TextUtils;
 import com.android.volley.VolleyLog.MarkerLog;
+import com.android.volley.toolbox.ResponseHandler;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
@@ -34,7 +36,7 @@ import java.util.Map;
  *
  * @param <T> The type of parsed response this request expects.
  */
-public abstract class Request<T> implements Comparable<Request<T>> {
+public class Request<T> implements Comparable<Request<T>> {
 
     /** Default encoding for POST or PUT parameters. See {@link #getParamsEncoding()}. */
     private static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
@@ -114,6 +116,11 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      */
     private Cache.Entry mCacheEntry = null;
 
+    /**
+     * Handles parsing and delivery of responses.
+     */
+    private ResponseHandler<T> mResponseHandler;
+
     /** An opaque token tagging this request; used for bulk cancellation. */
     private Object mTag;
 
@@ -126,23 +133,26 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      * listener is not provided here as delivery of responses is provided by subclasses, who have a
      * better idea of how to deliver an already-parsed response.
      *
-     * @deprecated Use {@link #Request(int, String, com.android.volley.Response.ErrorListener)}.
+     * @deprecated Use {@link #Request(int, String, com.android.volley.toolbox.ResponseHandler)}.
      */
     @Deprecated
     public Request(String url, Response.ErrorListener listener) {
-        this(Method.DEPRECATED_GET_OR_POST, url, listener);
+        //TODO identify how ResponseHandler will fit in here. Default?
+        this(Method.DEPRECATED_GET_OR_POST, url, listener, null);
     }
 
     /**
      * Creates a new request with the given method (one of the values from {@link Method}), URL, and
      * error listener. Note that the normal response listener is not provided here as delivery of
-     * responses is provided by subclasses, who have a better idea of how to deliver an
+     * responses is provided by the response handler, who have a better idea of how to deliver an
      * already-parsed response.
      */
-    public Request(int method, String url, Response.ErrorListener listener) {
+    public Request(int method, String url, Response.ErrorListener listener,
+                   ResponseHandler<T> responseHandler) {
         mMethod = method;
         mUrl = url;
         mErrorListener = listener;
+        mResponseHandler = responseHandler;
         setRetryPolicy(new DefaultRetryPolicy());
 
         mDefaultTrafficStatsTag = findDefaultTrafficStatsTag(url);
@@ -549,14 +559,16 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
-     * Subclasses must implement this to parse the raw network response and return an appropriate
+     * Delegates to the response handler to parse the raw network response and return an appropriate
      * response type. This method will be called from a worker thread. The response will not be
      * delivered if you return null.
      *
      * @param response Response from the network
      * @return The parsed response, or null in the case of an error
      */
-    protected abstract Response<T> parseNetworkResponse(NetworkResponse response);
+    protected Response<T> parseNetworkResponse(NetworkResponse response){
+        return mResponseHandler.parseNetworkResponse(response);
+    }
 
     /**
      * Subclasses can override this method to parse 'networkError' and return a more specific error.
@@ -571,14 +583,16 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
-     * Subclasses must implement this to perform delivery of the parsed response to their listeners.
-     * The given response is guaranteed to be non-null; responses that fail to parse are not
-     * delivered.
+     * Delegates to the response handler to perform delivery of the parsed response to their
+     * listeners. The given response is guaranteed to be non-null; responses that fail to parse are
+     * not delivered.
      *
      * @param response The parsed response returned by {@link
      *     #parseNetworkResponse(NetworkResponse)}
      */
-    protected abstract void deliverResponse(T response);
+    protected void deliverResponse(T response){
+        mResponseHandler.deliverResponse(response);
+    }
 
     /**
      * Delivers error message to the ErrorListener that the Request was initialized with.
