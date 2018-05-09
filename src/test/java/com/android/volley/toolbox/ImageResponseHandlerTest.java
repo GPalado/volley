@@ -7,6 +7,8 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowBitmapFactory;
 
 import java.io.ByteArrayOutputStream;
@@ -18,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(RobolectricTestRunner.class)
 public class ImageResponseHandlerTest {
     @Test
     public void parseNetworkResponse_resizing() throws Exception {

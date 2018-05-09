@@ -37,7 +37,6 @@ public class JsonRequestTest {
                 JsonRequest.class.getConstructor(
                         String.class,
                         String.class,
-                        Response.Listener.class,
                         Response.ErrorListener.class,
                         ResponseHandler.class));
         assertNotNull(
@@ -45,7 +44,6 @@ public class JsonRequestTest {
                         int.class,
                         String.class,
                         String.class,
-                        Response.Listener.class,
                         Response.ErrorListener.class,
                         ResponseHandler.class));
 
