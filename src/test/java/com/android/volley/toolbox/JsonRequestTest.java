@@ -19,6 +19,8 @@ package com.android.volley.toolbox;
 import static org.junit.Assert.assertNotNull;
 
 import com.android.volley.Response;
+import com.android.volley.ResponseHandler;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -36,14 +38,16 @@ public class JsonRequestTest {
                         String.class,
                         String.class,
                         Response.Listener.class,
-                        Response.ErrorListener.class));
+                        Response.ErrorListener.class,
+                        ResponseHandler.class));
         assertNotNull(
                 JsonRequest.class.getConstructor(
                         int.class,
                         String.class,
                         String.class,
                         Response.Listener.class,
-                        Response.ErrorListener.class));
+                        Response.ErrorListener.class,
+                        ResponseHandler.class));
 
         assertNotNull(
                 JsonArrayRequest.class.getConstructor(

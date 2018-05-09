@@ -34,7 +34,6 @@ public class ImageResponseHandler extends ResponseHandler<Bitmap> {
 
     @Override
     public Response<Bitmap> parseNetworkResponse(NetworkResponse response) {
-        // TODO (gpalado): Identify ways to make mUrl available here, perhaps without having to pass it through constructor in case of mismatching Request and ResponseHandler urls.
         // Serialize all decode on a global lock to reduce concurrent heap usage.
         synchronized (sDecodeLock) {
             try {

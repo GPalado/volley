@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.android.volley.toolbox;
+package com.android.volley;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;

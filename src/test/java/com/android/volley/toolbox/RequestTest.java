@@ -23,6 +23,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ResponseHandler;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class RequestTest {
         // Catch-all test to find API-breaking changes.
         assertNotNull(
                 Request.class.getConstructor(
-                        int.class, String.class, Response.ErrorListener.class));
+                        int.class, String.class, Response.ErrorListener.class, ResponseHandler.class));
 
         assertNotNull(Request.class.getMethod("getMethod"));
         assertNotNull(Request.class.getMethod("setTag", Object.class));
