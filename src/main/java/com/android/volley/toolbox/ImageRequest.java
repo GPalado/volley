@@ -18,7 +18,6 @@ package com.android.volley.toolbox;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.support.annotation.GuardedBy;
 import android.widget.ImageView.ScaleType;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -34,12 +33,6 @@ public class ImageRequest extends Request<Bitmap> {
 
     /** Default backoff multiplier for image requests */
     public static final float DEFAULT_IMAGE_BACKOFF_MULT = 2f;
-
-    /** Lock to guard mListener as it is cleared on cancel() and read on delivery. */
-    private final Object mLock = new Object();
-
-    @GuardedBy("mLock")
-    private Response.Listener<Bitmap> mListener;
 
     /**
      * Creates a new image request, decoding to a maximum specified width and height. If both width
@@ -77,7 +70,6 @@ public class ImageRequest extends Request<Bitmap> {
                         DEFAULT_IMAGE_TIMEOUT_MS,
                         DEFAULT_IMAGE_MAX_RETRIES,
                         DEFAULT_IMAGE_BACKOFF_MULT));
-        mListener = listener;
     }
 
     /**
@@ -105,13 +97,5 @@ public class ImageRequest extends Request<Bitmap> {
     @Override
     public Priority getPriority() {
         return Priority.LOW;
-    }
-
-    @Override
-    public void cancel() {
-        super.cancel();
-        synchronized (mLock) {
-            mListener = null;
-        }
     }
 }

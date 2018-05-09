@@ -16,10 +16,8 @@
 
 package com.android.volley.toolbox;
 
-import android.support.annotation.GuardedBy;
 import com.android.volley.Request;
 import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
 import com.android.volley.ResponseHandler;
 import com.android.volley.VolleyLog;
 import java.io.UnsupportedEncodingException;
@@ -38,29 +36,22 @@ public abstract class JsonRequest<T> extends Request<T> {
     private static final String PROTOCOL_CONTENT_TYPE =
             String.format("application/json; charset=%s", PROTOCOL_CHARSET);
 
-    /** Lock to guard mListener as it is cleared on cancel() and read on delivery. */
-    private final Object mLock = new Object();
-
-    @GuardedBy("mLock")
-    private Listener<T> mListener;
-
     private final String mRequestBody;
 
     /**
      * Deprecated constructor for a JsonRequest which defaults to GET unless {@link #getPostBody()}
      * or {@link #getPostParams()} is overridden (which defaults to POST).
      *
-     * @deprecated Use {@link #JsonRequest(int, String, String, Listener, ErrorListener,
+     * @deprecated Use {@link #JsonRequest(int, String, String, ErrorListener,
      * ResponseHandler)}.
      */
     @Deprecated
     public JsonRequest(
             String url,
             String requestBody,
-            Listener<T> listener,
             ErrorListener errorListener,
             ResponseHandler<T> responseHandler) {
-        this(Method.DEPRECATED_GET_OR_POST, url, requestBody, listener, errorListener,
+        this(Method.DEPRECATED_GET_OR_POST, url, requestBody, errorListener,
                 responseHandler);
     }
 
@@ -68,20 +59,10 @@ public abstract class JsonRequest<T> extends Request<T> {
             int method,
             String url,
             String requestBody,
-            Listener<T> listener,
             ErrorListener errorListener,
             ResponseHandler<T> responseHandler) {
         super(method, url, errorListener, responseHandler);
-        mListener = listener;
         mRequestBody = requestBody;
-    }
-
-    @Override
-    public void cancel() {
-        super.cancel();
-        synchronized (mLock) {
-            mListener = null;
-        }
     }
 
     /** @deprecated Use {@link #getBodyContentType()}. */

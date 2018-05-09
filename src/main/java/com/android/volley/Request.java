@@ -320,7 +320,7 @@ public class Request<T> implements Comparable<Request<T>> {
      * <ul>
      *   <li>This method is called on the same thread as the {@link ResponseDelivery} is running on.
      *       By default, this is the main thread.
-     *   <li>The request subclass being used overrides cancel() and ensures that it does not invoke
+     *   <li>The {@link ResponseHandler provided in the constructor} ensures that it does not invoke
      *       the listener in {@link #deliverResponse} after cancel() has been called in a
      *       thread-safe manner.
      * </ul>
@@ -332,6 +332,9 @@ public class Request<T> implements Comparable<Request<T>> {
         synchronized (mLock) {
             mCanceled = true;
             mErrorListener = null;
+        }
+        if (mResponseHandler != null){
+            mResponseHandler.cancel();
         }
     }
 

@@ -23,8 +23,22 @@ public abstract class ResponseHandler<T> {
         mListener = listener;
     }
 
+    /**
+     * Parses the raw network response and return an appropriate response type. This method will be
+     * called by a request to be parsed. The response will not be delivered if you return null.
+     *
+     * @param response Response from the network
+     * @return The parsed response, or null in the case of an error
+     */
     protected abstract Response<T> parseNetworkResponse(NetworkResponse response);
 
+    /**
+     * Performs the delivery of the parsed response to their listeners. The given response is
+     * guaranteed to be non-null; responses that fail to parse are not delivered.
+     *
+     * @param response The parsed response returned by {@link
+     *     #parseNetworkResponse(NetworkResponse)}
+     */
     protected void deliverResponse(T response) {
         Response.Listener<T> listener;
         synchronized (mLock){
@@ -32,6 +46,16 @@ public abstract class ResponseHandler<T> {
         }
         if(listener != null){
             listener.onResponse(response);
+        }
+    }
+
+    /**
+     * Cancels the handling of the response by ensuring the listener provided in the constructor
+     * is not invoked.
+     */
+    protected void cancel() {
+        synchronized (mLock) {
+            mListener = null;
         }
     }
 }

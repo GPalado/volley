@@ -16,19 +16,12 @@
 
 package com.android.volley.toolbox;
 
-import android.support.annotation.GuardedBy;
 import com.android.volley.Request;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 
 /** A canned request for retrieving the response body at a given URL as a String. */
 public class StringRequest extends Request<String> {
-
-    /** Lock to guard mListener as it is cleared on cancel() and read on delivery. */
-    private final Object mLock = new Object();
-
-    @GuardedBy("mLock")
-    private Listener<String> mListener;
 
     /**
      * Creates a new request with the given method.
@@ -41,7 +34,6 @@ public class StringRequest extends Request<String> {
     public StringRequest(
             int method, String url, Listener<String> listener, ErrorListener errorListener) {
         super(method, url, errorListener, new StringResponseHandler(listener));
-        mListener = listener;
     }
 
     /**
@@ -53,13 +45,5 @@ public class StringRequest extends Request<String> {
      */
     public StringRequest(String url, Listener<String> listener, ErrorListener errorListener) {
         this(Method.GET, url, listener, errorListener);
-    }
-
-    @Override
-    public void cancel() {
-        super.cancel();
-        synchronized (mLock) {
-            mListener = null;
-        }
     }
 }
