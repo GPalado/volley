@@ -176,7 +176,6 @@ public class Request<T> implements Comparable<Request<T>> {
      */
     @Deprecated
     public Request(String url, Response.ErrorListener listener) {
-        //TODO identify how ResponseHandler will fit in here. Default?
         this(Method.DEPRECATED_GET_OR_POST, url, listener, null);
     }
 
